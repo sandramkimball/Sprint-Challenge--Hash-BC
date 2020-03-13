@@ -1,8 +1,3 @@
-
-
-# '''
-# Linked List hash table key/value pair
-# '''
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -10,9 +5,6 @@ class LinkedPair:
         self.next = None
 
 
-# '''
-# Resizing hash table
-# '''
 class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
