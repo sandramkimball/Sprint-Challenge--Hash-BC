@@ -7,27 +7,35 @@ from hashtables import (HashTable, #(self, capacity)
 
 def get_indices_of_item_weights(weights, length, limit):
     ht = HashTable(16) 
-    total_weight = 0
-    answer = ()
-    i = 0
-    hash_table_insert(ht, 21, weights[0]) 
+    # total_weight = 0
+    # answer = ()
+    # pair = ()
+    # i = 0
+    
+    for i in range(length): # O(n)
+        difference = limit - weights[i]
+        value = hash_table_retrieve(ht, difference)
 
-    difference = limit - weights[i]
-    target = hash_table_retrieve(ht, difference)
+        if value is not None:
+            pair = (value, weights[i])
 
-    for i in range(length):
-        if weights[i] + weights[i+1] < limit:
-            hash_table_insert(ht, key=weights[i], value=i)
-            
-            i += 1
-            return 
+            if value < weights[i]:
+                pair = (weights[i], value)
+
+            return pair
+
+        hash_table_insert(ht, weights[i], i)
+
+    return None
+
+    # for weight in weights:
+    #     value = hash_table_retrieve(ht, limit - weight)
+    #     Index = weights[weight]
+
+    #     if value:
+    #         return value, Index
         
-        if target is not None:
-            return (i, target)
-            hash_table_insert(ht, weights[i], i)
-
-        else:
-            return None
+    # return None
 
 
 def print_answer(answer):

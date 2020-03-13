@@ -32,24 +32,34 @@ def append(self, value):
     self.insert(self.count, value)
 
 def reconstruct_trip(tickets, length): # O(1) linear time
-    hashtable = HashTable(length)
+    ht = HashTable(length)
     route = [None] * length # self.storage
+    origin = 'NONE'
+    # hash(self.source, self.destination)
 
-    hash(key=source, value=destination)
+    for t in tickets:
+        hash_table_insert(ht, t.source, t.destination)
+        
 
-    while i < len(tickets) + 1:
-        if i[key] == i + 1[value]:
-            hash_table_insert(i, i+1)
-            i += 1
-        else: 
-            i += 1
-
-        # origin - insert to front - (self, index, value)
-        if i[key] == 'NONE':
-            self.insert(0, i[value])
-            
-        # final destination - append to end - (self, value)
-        if i[value] == 'NONE':
-           self.append(i[key]) 
+    for i in range(len(route)):
+        route[i] = hash_table_retrieve(ht, origin)
+        origin = route[i]
     
-    return route
+
+    #     if t.source == t + 1.destination:
+    #         route.append(i, i+1)
+
+    #         i += 1
+    #     else: 
+    #         i += 1
+
+    #     # origin - insert to front - (self, index, value)
+    #     if i[source] == 'NONE':
+    #         route.insert(0, i[destination])
+            
+    #     # final destination - append to end - (self, value)
+    #     if i[destination] == 'NONE':
+    #        route.append(i[source]) 
+
+    # route = hash_table_remove(ht, route[-1])
+    return route[0:-1]

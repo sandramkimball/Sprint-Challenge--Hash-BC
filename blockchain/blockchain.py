@@ -68,7 +68,7 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
-@app.route('/mine', methods=['POST'])
+@app.route('/mine', methods=['GET'])
 def mine():
     # Handle non json request
     values = request.get_json()
