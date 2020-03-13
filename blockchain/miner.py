@@ -1,12 +1,8 @@
 import hashlib
 import requests
-
 import sys
-
 from uuid import uuid4
-
 from timeit import default_timer as timer
-
 import random
 
 
@@ -23,8 +19,10 @@ def proof_of_work(last_proof):
     start = timer()
 
     print("Searching for next proof")
+    block_string = json.dumps(block, sort_keys=True)
     proof = 0
-    #  TODO: Your code here
+    while self.valid_proof(block_string, proof): #until num proof is found
+        proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -38,9 +36,10 @@ def valid_proof(last_hash, proof):
 
     IE:  last_hash: ...AE9123456, new hash 123456E88...
     """
+    guess = f'{block_string}{proof}'
+    guess_hash = hashlib.sha256(guess).hexdigest()
 
-    # TODO: Your code here!
-    pass
+    return guess_hash[:6] =='000000'
 
 
 if __name__ == '__main__':

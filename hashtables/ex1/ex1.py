@@ -2,18 +2,21 @@
 from hashtables import (HashTable,
                         hash_table_insert,
                         hash_table_remove,
-                        hash_table_retrieve,
-                        hash_table_resize)
+                        hash_table_retrieve)
 
 
 def get_indices_of_item_weights(weights, length, limit):
-    ht = HashTable(16)
+    ht = HashTable(16) #(self, capacity)
+    total_weight = 0
+    answer = ()
+    hash_table_insert(ht, 21, weights[0]) #(hashtable, key, value)
 
-    """
-    YOUR CODE HERE
-    """
-
-    return None
+    while i < len(weights) + 1:
+       if weights[i] + hash_table_retrieve(ht, i[0]) < hash_table_retrieve(ht, i):
+           answer = (hash_table_retrieve(ht, i), weights[i])
+           
+        else:
+            return None
 
 
 def print_answer(answer):
