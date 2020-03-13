@@ -68,7 +68,7 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
-@app.route('/mine', methods=['GET'])
+@app.route('/mine', methods=['POST'])
 def mine():
     # Handle non json request
     values = request.get_json()
@@ -90,7 +90,7 @@ def mine():
         block = blockchain.new_block(proof, previous_hash)
     else:
         response={
-            'message': 'Proof was invalid or late'
+            'message': 'Proof was invalid or already used'
         }
         return jsonify(response), 200
 
@@ -107,7 +107,8 @@ def mine():
     return jsonify(response), 200
 
 
-@app.route('/chain', methods=['GET'])
+# @app.route('/chain', methods=['GET'])
+@app.route('/full_chain', methods=['GET'])
 def full_chain():
     response = {
         'chain': blockchain.chain,
@@ -129,13 +130,37 @@ def recieve_transaction():
     required=['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
         response={'message': 'Missing values'}
-        return jsonigy(response), 400
+        return jsonify(response), 400
 
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
     response = {
         "message": f'Transaction will be added to block {index}.'
     }
     return jsonify(response), 200
+
+@app.route('/totals', methods=['GET'])
+def get_totals(): 
+    #return totals for each id
+    values = request.get_json()
+    total = 0
+    required=['sender', 'recipient', 'amount']
+
+    if not all(k in values for k in required): 
+        response = {'message': 'Missing values'}
+        return jsonify(response), 400
+
+    if 'sender' == id:
+        total -= amount
+    if 'recipient' == id:
+        total += amount
+
+
+    response = {
+        "total": total
+    }
+    return jsonify(response), 200
+
+
 
 
 if __name__ == '__main__':

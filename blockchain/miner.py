@@ -1,8 +1,12 @@
 import hashlib
 import requests
+import json
 import sys
+
 from uuid import uuid4
+
 from timeit import default_timer as timer
+
 import random
 
 
@@ -15,13 +19,13 @@ def proof_of_work(last_proof):
     - p is the previous proof, and p' is the new proof
     - Use the same method to generate SHA-256 hashes as the examples in class
     """
-
+    # block_string = json.dumps(block, sort_keys=True)
+    last_hash = hashlib.sha256(str(last_proof).encode()).hexdigest()
     start = timer()
-
     print("Searching for next proof")
-    block_string = json.dumps(block, sort_keys=True)
     proof = 0
-    while self.valid_proof(block_string, proof): #until num proof is found
+    
+    while valid_proof(last_hash, proof):
         proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
@@ -33,13 +37,13 @@ def valid_proof(last_hash, proof):
     Validates the Proof:  Multi-ouroborus:  Do the last six characters of
     the hash of the last proof match the first six characters of the hash
     of the new proof?
-
     IE:  last_hash: ...AE9123456, new hash 123456E88...
     """
-    guess = f'{block_string}{proof}'
-    guess_hash = hashlib.sha256(guess).hexdigest()
 
-    return guess_hash[:6] =='000000'
+    guess = f'{last_hash}{proof}'
+    guess_hash = hashlib.sha256(str(proof).encode()).hexdigest()
+
+    return guess_hash[:6] == '000000'
 
 
 if __name__ == '__main__':
@@ -60,18 +64,22 @@ if __name__ == '__main__':
     if id == 'NONAME\n':
         print("ERROR: You must change your name in `my_id.txt`!")
         exit()
+
     # Run forever until interrupted
     while True:
-        # Get the last proof from the server
         r = requests.get(url=node + "/last_proof")
         data = r.json()
-        new_proof = proof_of_work(data.get('proof'))
+        block = data['proof']
+        new_proof = proof_of_work(block)
 
         post_data = {"proof": new_proof,
                      "id": id}
-
         r = requests.post(url=node + "/mine", json=post_data)
+
         data = r.json()
+
+
+
         if data.get('message') == 'New Block Forged':
             coins_mined += 1
             print("Total coins mined: " + str(coins_mined))
